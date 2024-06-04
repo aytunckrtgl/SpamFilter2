@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:15.5-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./create-dbs.sql:/docker-entrypoint-initdb.d/create-dbs.sql
+    environment:
+      - POSTGRES_PASSWORD=qdtbs
+      - TZ=Europe/Istanbul
+      - LANG=tr-TR.utf8
+      - POSTGRES_INITDB_ARGS=--locale-provider=icu --icu-locale=tr-TR
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
+      - "-c"
+      - "max_replication_slots=10"
+      - "-c"
+      - "max_wal_senders=10"
+    restart: always
